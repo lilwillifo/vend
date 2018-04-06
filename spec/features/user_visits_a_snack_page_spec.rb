@@ -10,7 +10,16 @@ describe 'As a user When I visit a specific snack page' do
     expect(page).to have_content(snack.price)
   end
   it 'and I see a list of locations with vending machines that carry that snack' do
+    snack = Snack.create(name: 'pringles', price: 150)
+    owner = Owner.create(name:'Bob')
+    machine_1 = snack.machines.create(location: 'Turing', owner_id: owner.id)
+    machine_2 = snack.machines.create(location: 'Union Station', owner_id: owner.id)
 
+    visit snack_path(snack)
+
+    snack.machines.each do |machine|
+      expect(page).to have_content(machine.location)
+    end
   end
   it 'and I see the average price for snacks in those vending machines' do
 
